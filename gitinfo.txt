@@ -1,7 +1,6 @@
 
-
 https://github.com/sushildw/myrepo.git
-sushildw,@sushil9#
+
 
 [2:33:36 PM] Tejas Damle: lets try with ssh
 [2:33:54 PM] Tejas Damle: $ ssh-keygen -C "hiteshj@cybage.com" -t rsa
