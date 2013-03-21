@@ -1,0 +1,35 @@
+
+
+https://github.com/sushildw/myrepo.git
+sushildw,@sushil9#
+
+[2:33:36 PM] Tejas Damle: lets try with ssh
+[2:33:54 PM] Tejas Damle: $ ssh-keygen -C "hiteshj@cybage.com" -t rsa
+go to account and put ssh key from .ssh folder's file id_rsa.pub
+
+
+
+git config --global user.email hiteshj@cybage.com
+git config --global user.name "Hitesh Joshi"
+
+
+git add <file name>
+git commit -m "commetnt....."
+git push origin <branch name{master}>
+
+
+s/w:
+Git-1.7.10-preview20120409.exe
+
+
+
+$ git clone git@github.com:sushildw/myrepo.git
+Cloning into 'myrepo'...
+The authenticity of host 'github.com (207.97.227.239)' can't be established.
+RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'github.com,207.97.227.239' (RSA) to the list of known hosts.
+warning: You appear to have cloned an empty repository.
+
+
+
