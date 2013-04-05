@@ -1,0 +1,347 @@
+------------------------------------
+https://github.com/sushildw/myrepo.git
+sushildw,@sushil9#
+[2:33:54 PM] Tejas Damle: $ ssh-keygen -C "hiteshj@cybage.com" -t rsa
+-------------------------------------
+[training@localhost ~]$ hadoop fs -copyToLocal hdfs://localhost:8020/user/training/lab1-java-mapreduce/job sushil9/sush2/
+
+
+javac -classpath $HADOOP_HOME/hadoop-core.jar *.java
+jar cvf wc.jar *.class
+
+hadoop jar wc.jar WordCount shakespeare wordcounts2
+
+
+xls
+/usr/lib/hadoop/lib
+/home/training/workspace/training/lib/commons-lang*
+
+http://localhost.localdomain:50070/dfshealth.jsp
+
+
+
+
+
+CREATE EXTERNAL TABLE movie (id INT, name STRING, year INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' LOCATION 'hdfs://localhost/user/training/movie';
+
+
+
+CREATE EXTERNAL TABLE movie2 (id INT, name STRING, year INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' LOCATION 'hdfs://localhost/user/training/movie2';
+
+INSERT OVERWRITE TABLE movie2 SELECT * FROM movie;  
+
+
+hdfs://localhostuser/training/movie
+
+
+/home/training/training_materials/developer/exercises/wordcount/temp/exercise/hive
+
+
+CREATE TEMPORARY FUNCTION strip AS 'Strip';
+
+
+----------
+[root@localhost hive]# javac -classpath $HADOOP_HOME/hadoop-core.jar:/usr/lib/hadoop/lib/commons-lang-2.4.jar:/usr/lib/hadoop/lib/hive-0.4.1.jar Strip.java
+
+---------------------------
+
+JOIN
+
+/home/training/training_materials/developer/exercises/wordcount/temp/exercise/join
+
+Creating Hive tables to store the files:
+
+CREATE TABLE customer_details (cellNumber String,consumerName String)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH '/home/training/training_materials/developer/exercises/wordcount/temp/exercise/join/ConsumerDetails.txt' INTO TABLE customer_details;
+
+CREATE TABLE delivery_report (cellNumber String,statusCode int)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH '/home/training/training_materials/developer/exercises/wordcount/temp/exercise/join/DeliveryReport.txt' INTO TABLE delivery_report;
+
+
+CREATE TABLE status_codes (statusCode int,statusMessage String)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH '/home/training/training_materials/developer/exercises/wordcount/temp/exercise/join/StatusCodes.txt' INTO TABLE status_codes;
+
+
+Select cd.consumerName,sc.statusMessage FROM customer_details cd
+JOIN delivery_report dr ON (cd.cellNumber = dr.cellNumber) JOIN
+status_codes sc ON(dr.statusCode = sc.statusCode);
+
+
+The following command outputs the table to local directory
+INSERT OVERWRITE LOCAL DIRECTORY '<directory>' SELECT * FROM table_name;
+ The following command outputs the table to a HDFS file
+INSERT OVERWRITE DIRECTORY '/tmp/hdfs_out' SELECT a.* FROM table_name;
+
+
+INSERT OVERWRITE LOCAL DIRECTORY '/home/training/sushil/sush2' Select cd.consumerName,sc.statusMessage FROM customer_details cd
+JOIN delivery_report dr ON (cd.cellNumber = dr.cellNumber) JOIN
+status_codes sc ON(dr.statusCode = sc.statusCode);
+
+http://www.box.com/s/22df998009068391c380
+==========
+hive
+==========
+[non interactive mode]
+
+echo 'X' > /home/training/sushil9/hive/dummy.txt
+
+hive -e "CREATE TABLE dummy (value STRING); \
+LOAD DATA LOCAL INPATH '/home/training/sushil9/hive/dummy.txt' \
+OVERWRITE INTO TABLE dummy"
+
+hive -S -e 'SELECT * FROM dummy'
+
+[interactive mode]
+
+CREATE TABLE records (year STRING, temperature INT, quality INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t';
+
+LOAD DATA LOCAL INPATH '/home/training/sushil9/hive/sample.txt'
+OVERWRITE INTO TABLE records;
+
+SELECT year, MAX(temperature)
+ FROM records
+ WHERE temperature != 5
+ AND (quality = 1 OR quality = 2 OR quality = 3 OR quality = 4 OR quality = 5)
+ GROUP BY year;
+ 
+1930    35
+1950    30
+1980    55
+1990    40
+2012    45
+
+
+CREATE TABLE managed_table (dummy STRING);
+
+LOAD DATA INPATH '/user/training/test/hive/data.txt' INTO table managed_table;
+
+DROP TABLE managed_table;
+
+CREATE EXTERNAL TABLE external_table (dummy STRING)
+LOCATION '/user/training/test/hive/external_table';
+
+LOAD DATA INPATH '/user/training/test/hive/data.txt' INTO TABLE external_table;
+
+
+==========
+hive udf
+==========
+ADD JAR /home/training/sushil9/uppercase.jar;
+CREATE TEMPORARY FUNCTION uppercase AS 'UpperCase';
+SELECT uppercase(name) FROM movie where id = 1;
+
+===============
+hive partition
+================
+CREATE TABLE logs (ts BIGINT, line STRING)
+PARTITIONED BY (dt STRING, country STRING);
+
+LOAD DATA LOCAL INPATH 'input/hive/partitions/file1'
+INTO TABLE logs
+PARTITION (dt='2001-01-01', country='GB');
+
+/home/training/sushil9/hive/data.csv
+John,45,2012-11-11
+Tom,18,2012-11-11
+Lars,59,2012-11-11
+Bob,34,2012-11-12
+Taylor,21,2012-11-12
+
+CREATE TABLE table1(name STRING, age INT, entry_date STRING) 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH '/home/training/sushil9/hive/data.csv' OVERWRITE INTO TABLE table1;
+
+SELECT AVG(age),STDDEV_POP(age) FROM table1
+WHERE age >= 21 AND entry_date='2012-11-12';
+
+CREATE TABLE table1_partitioned(name STRING, age INT) PARTITIONED BY (entry_date STRING) 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+INSERT OVERWRITE TABLE table1_partitioned PARTITION (entry_date='2012-11-11’) SELECT name, age FROM table1 WHERE entry_date='2012-11-11' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+INSERT OVERWRITE TABLE table1_partitioned PARTITION (entry_date='2012-11-11')
+SELECT name, age FROM table1 WHERE entry_date='2012-11-11';
+
+INSERT OVERWRITE TABLE table1_partitioned PARTITION (entry_date='2012-11-12')
+SELECT name, age FROM table1 WHERE entry_date='2012-11-12';
+
+ INSERT OVERWRITE TABLE page_view PARTITION(dt='2008-06-08', country='US')
+           SELECT pvs.viewTime, pvs.userid, pvs.page_url, pvs.referrer_url, null, null, pvs.ip WHERE pvs.country = 'US'
+
+		   
+CREATE TABLE table3(name STRING, age INT) PARTITIONED BY (entry_date STRING) 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH '/home/training/sushil9/hive/data.csv' OVERWRITE INTO TABLE table3 PARTITION (entry_date='2012-11-11');
+LOAD DATA LOCAL INPATH "/home/training/sushil9/hive/data.csv" INTO TABLE table3 PARTITION (entry_date='2012-11-11');
+
+CREATE TABLE target(id INT, userName STRING) 
+PARTITIONED BY(dt STRING)
+ROW FORMAT DELIMITED 
+FIELDS TERMINATED BY ','; 
+
+
+load data local inpath "/home/training/sushil9/hive/data2.txt" into table target PARTITION (dt='2013-04-03');
+==========
+bucket: /home/training/sushil9/hive/bucket.txt
+==========
+CREATE TABLE bucketed_users (id INT, name STRING)
+CLUSTERED BY (id) INTO 4 BUCKETS;
+
+SET hive.enforce.bucketing=true;
+
+INSERT OVERWRITE TABLE bucketed_users SELECT * FROM users;
+
+CREATE TABLE users(id INT, name STRING) 
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ',';
+
+LOAD DATA LOCAL INPATH '/home/training/sushil9/hive/bucket.txt' OVERWRITE INTO TABLE users;
+
+
+INSERT OVERWRITE TABLE bucketed_users SELECT * FROM users;
+/user/hive/warehouse/bucketed_users
+=====
+pig
+=====
+REGISTER ./uppercase.jar;
+raw = LOAD '/user/training/test9' USING PigStorage(',') AS (name:chararray, address:chararray);
+dump raw;
+clean1 = FOREACH raw GENERATE UPPER(name) as name, address;
+dump clean1;
+
+STORE clean1 INTO '/tmp/uppercase-results' USING PigStorage(); 
+
+=========
+pig join
+=========
+A = LOAD '/user/training/test/pig/A.txt'  USING PigStorage(',') AS (id:int, value:chararray);
+B = LOAD '/user/training/test/pig/B.txt'  USING PigStorage(',') AS (value:chararray, id:int);
+C = JOIN A BY $0, B BY $1;
+C = JOIN A BY $0, B BY $1 USING 'replicated';
+C = JOIN A BY $0 LEFT OUTER, B BY $1;
+D = COGROUP A BY $0, B BY $1;
+
+grunt> DUMP A;
+2,Tie
+4,Coat
+3,Hat
+1,Scarf
+grunt> DUMP B;
+Joe,2
+Hank,4
+Ali,0
+Eve,3
+Hank,2
+grunt> DUMP C;
+(2,Tie,Joe,2)
+(2,Tie,Hank,2)
+(3,Hat,Eve,3)
+(4,Coat,Hank,4)
+C = JOIN A BY $0 LEFT OUTER, B BY $1;
+(1,Scarf,,)
+(2,Tie,Joe,2)
+(2,Tie,Hank,2)
+(3,Hat,Eve,3)
+(4,Coat,Hank,4)
+D = COGROUP A BY $0, B BY $1;
+(0,{},{(Ali,0)})
+(1,{(1,Scarf)},{})
+(2,{(2,Tie)},{(Joe,2),(Hank,2)})
+(3,{(3,Hat)},{(Eve,3)})
+(4,{(4,Coat)},{(Hank,4)})
+
+==================
+pig groupBy, filter
+==================
+1990,40,5
+1950,30,3
+1930,10,2
+1995,5,1
+1980,50,4
+2010,35,0
+2012,45,3
+1980,55,4
+1990,30,5
+1950,20,3
+1930,35,2
+2010,45,0
+
+-- max_temp.pig: Finds the maximum temperature by year
+records = LOAD '/user/training/test/pig/temperature.txt' USING PigStorage(',') AS (year:chararray, temperature:int, quality:int);
+filtered_records = FILTER records BY temperature != 5 AND (quality == 1 OR quality == 2 OR quality == 3 OR quality == 4 OR quality == 5);
+(1990,40,5)
+(1950,30,3)
+(1930,10,2)
+(1980,50,4)
+(2012,45,3)
+(1980,55,4)
+(1990,30,5)
+(1950,20,3)
+(1930,35,2)
+
+grouped_records = GROUP filtered_records BY year;
+(1930,{(1930,10,2),(1930,35,2)})
+(1950,{(1950,30,3),(1950,20,3)})
+(1980,{(1980,50,4),(1980,55,4)})
+(1990,{(1990,40,5),(1990,30,5)})
+(2012,{(2012,45,3)})
+
+
+
+max_temp = FOREACH grouped_records GENERATE group, MAX(filtered_records.temperature);
+DUMP max_temp;
+(1930,35)
+(1950,30)
+(1980,55)
+(1990,40)
+(2012,45)
+
+do = ORDER max_temp BY $0 DESC;
+(2012,45)
+(1990,40)
+(1980,55)
+(1950,30)
+(1930,35)
+grunt> lmt = LIMIT do 2;
+grunt> dump lmt;
+
+===========================
+HBase
+============================
+
+create 'blogposts', 'post', 'image'
+
+put 'blogposts', 'post1', 'post:title', 'Hello World'
+put 'blogposts', 'post1', 'post:author', 'The Author'
+put 'blogposts', 'post1', 'post:body', 'This is a blog post'
+put 'blogposts', 'post1', 'image:header', 'image1.jpg'
+put 'blogposts', 'post1', 'image:bodyimage', 'image2.jpg'
+
+get 'blogposts', 'post1'
+
+put 'blogposts', 'post2', 'post:title2', 'Hello World2'
+put 'blogposts', 'post1', 'post:title2', 'Hello World2'
+
+create 'test', 'cf'
+list 'test'
+put 'test', 'row1', 'cf:a', 'value1'
+put 'test', 'row2', 'cf:b', 'value2'
+put 'test', 'row3', 'cf:c', 'value3'
+
+scan 'test'
+get 'test', 'row1'
+
+
+
