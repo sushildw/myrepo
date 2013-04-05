@@ -1,15 +1,13 @@
-
-
 https://github.com/sushildw/myrepo.git
-sushildw,@sushil9#
+
 
 [2:33:36 PM] Tejas Damle: lets try with ssh
-[2:33:54 PM] Tejas Damle: $ ssh-keygen -C "hiteshj@cybage.com" -t rsa
+[2:33:54 PM] Tejas Damle: $ ssh-keygen -C "hiteshj@gmail.com" -t rsa
 go to account and put ssh key from .ssh folder's file id_rsa.pub
 
 
 
-git config --global user.email hiteshj@cybage.com
+git config --global user.email hiteshj@gmail.com
 git config --global user.name "Hitesh Joshi"
 
 
